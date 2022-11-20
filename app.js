@@ -1,7 +1,15 @@
 var express = require('express');
 var app = express();
-app.get('*',function(req, res){
- res.send('Express Response');
-});
+var errorHandlers = require('./middleware/errorhandler');
+var log = require('./middleware/log');
+app.use(log.logger);
+app.use(express.static(__dirname + '/static'));
+var routes = require('./routes');
+app.get('/', routes.index);
+app.get('/login', routes.login);
+app.post('/login', routes.loginProcess);
+app.get('/chat', routes.chat);
+app.get('/account/login', routes.login);
+app.use(errorHandlers.notFound);
 app.listen(3000);
 console.log("App server running on port 3000");
