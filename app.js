@@ -1,15 +1,16 @@
 var express = require('express');
-var partials = require('express-partials');
 var app = express();
 var errorHandlers = require('./middleware/errorhandler');
 var log = require('./middleware/log');
-app.use(partials());
+var cookieParser = require('cookie-parser');
+var partials = require('express-partials');
+app.use(cookieParser());
+app.set('view engine', 'ejs');
 app.set('view options', {defaultLayout: 'layout'})
 app.use(log.logger);
 app.use(express.static(__dirname + '/static'));
 var routes = require('./routes');
-app.set('view engine', 'ejs');
-app.use(log.logger);
+app.use(partials());
 app.get('/', routes.index);
 app.get('/login', routes.login);
 app.post('/login', routes.loginProcess);
