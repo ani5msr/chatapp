@@ -1,7 +1,8 @@
 
 module.exports.loginProcess = loginProcess;
 exports.index = function index(req, res){
-    res.render('index', {title: 'Index', cookie: JSON.stringify(req.cookies)});
+    res.cookie('IndexCookie', 'This was set from Index');
+    res.render('index', {title: 'Index', cookie: JSON.stringify(req.cookies), session: JSON.stringify(req.session)});
    };
 exports.login = function chat(req, res){
     res.render('login', {title: 'Login'});

@@ -2,9 +2,21 @@ var express = require('express');
 var app = express();
 var errorHandlers = require('./middleware/errorhandler');
 var log = require('./middleware/log');
+var session = require('express-session');
+var RedisStore = require('connect-redis')(session);
 var cookieParser = require('cookie-parser');
 var partials = require('express-partials');
-app.use(cookieParser());
+app.use(session({secret: 'secret'}));
+app.use(session());
+app.use(session({
+    secret: 'secret',
+    saveUninitialized: true,
+    resave: true,
+    store: new RedisStore(
+    {url: 'redis://localhost'})
+    })
+   );
+app.use(cookieParser('secret'));
 app.set('view engine', 'ejs');
 app.set('view options', {defaultLayout: 'layout'})
 app.use(log.logger);
